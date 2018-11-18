@@ -15,6 +15,8 @@ class UrlController < ApplicationController
       if url.present?  
         original_url = url.original_url
         url.update(visits: (url.visits + 1)) #increments the number of visits by 1 
+        
+        RetrieveTitleJob.perform_later(friendly_url)
         return redirect_to original_url
       else 
         #add error here

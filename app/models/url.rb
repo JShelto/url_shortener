@@ -43,6 +43,7 @@ class Url < ApplicationRecord
 		doc = Nokogiri::HTML(open(url.original_url))
 		title = doc.title
 		if title.present?
+			url.title = title.to_s
 			url.save!
 		end
 	end
