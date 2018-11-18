@@ -1,4 +1,5 @@
 class Url < ApplicationRecord
+	require 'open-uri' #needed for Nokogiri
 
 	validates :original_url, :url => true #via valid_url gem
 	validates_uniqueness_of :original_url #prevents duplicate records
@@ -23,7 +24,7 @@ class Url < ApplicationRecord
 
 	#Returns the urls, count order descending. Defaults to 100 records
 	def self.most_visited(count: 100)
-		Url.order("visits DESC").first(count)
+		urls = Url.order("visits DESC").first(count)
 	end
 
 	#increases the visit count by 1 and updates the record
@@ -35,6 +36,15 @@ class Url < ApplicationRecord
 	#returns the original url based on the friendly url
 	def self.return_original_url
 
+	end
+
+	def self.get_title(friendly_url)
+		url = Url.find_by(friendly_url: friendly_url)
+		doc = Nokogiri::HTML(open(url.original_url))
+		title = doc.title
+		if title.present?
+			url.save!
+		end
 	end
         
 end
