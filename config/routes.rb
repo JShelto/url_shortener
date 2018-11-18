@@ -5,4 +5,5 @@ Rails.application.routes.draw do
 
   get "/:friendly_url", to: "url#redirect_shortened_url"
 
+  post "/url", to: "url#url", format: true
 end

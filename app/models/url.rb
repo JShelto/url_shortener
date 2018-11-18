@@ -19,7 +19,7 @@ class Url < ApplicationRecord
 
 	def generate_friendly_url(id)
 		id = self.id
-
+		"applepit"
 	end
 
 	#Returns the urls, count order descending. Defaults to 100 records
