@@ -1,6 +1,5 @@
 class UrlController < ApplicationController
 
-
   def url #returns the friendly url 
     url_str = params["url"]
     domain = "#{request.protocol}#{request.host_with_port}/" #current domain 
@@ -22,7 +21,7 @@ class UrlController < ApplicationController
       end
     end
 
-    
+
     respond_to do |format|
       format.json  { render :json => @message }
     end
@@ -35,13 +34,13 @@ class UrlController < ApplicationController
     if url.present?  
       original_url = url.original_url
       url.increase_visit_count #increments the number of visits by 1 
-      
+
       return redirect_to original_url
     else 
       render plain: "No url found for #{friendly_url}"
     end
   end
-    
+
   #displays the top 100 most visited urls
   def top
     @top_urls = Url.most_visited

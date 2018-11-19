@@ -11,7 +11,7 @@ class Url < ApplicationRecord
 	def save_friendly_url 
 		if self.valid? #includes url validation 
 			# self.save
-			
+
 			#friendly url is generated using id
 			#how to factor in same domain, paths, and params to minimize number of records
 			self.friendly_url = generate_friendly_url(self.id)
@@ -57,6 +57,7 @@ class Url < ApplicationRecord
 	end
 
 	private
+	
 		def self.convert_to_base(num, base = 62) #convert
 			return CHAR_MAP[0] if num == 0
 			result = ""
@@ -78,5 +79,5 @@ class Url < ApplicationRecord
 			end
 			base_10_num
 		end
-        
+
 end
