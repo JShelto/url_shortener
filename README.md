@@ -9,13 +9,13 @@ The app takes the provided url paramater and uses it to create a URL object whic
 
 ## API
 ##### Get shortened URL
-`curl -X POST -d "url=https://google.com" https://powerful-retreat-50185.herokuapp.com/url.json`
+`curl -X POST -d "url=https://google.com" localhost:3000/url.json`
 
 ##### Return list of top 100 urls
-`curl https://powerful-retreat-50185.herokuapp.com/top.json`
+`curl localhost:3000/top.json`
 
 ##### Show the URL that the app is redirecting you to
-`curl -I http://localhost/abc`
+`curl -I http://localhost:3000/abc`
 
 ### Setup:
 
