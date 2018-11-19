@@ -2,28 +2,11 @@ class UrlController < ApplicationController
 
   def url #returns the friendly url 
     url_str = params["url"]
-    domain = "#{request.protocol}#{request.host_with_port}/" #current domain 
-    friendly_url = ""
-    @message = "" #final output
-    if Url.exists?(:original_url => url_str)
-      friendly_url = Url.find_by(original_url: url_str).friendly_url
-      @message = domain + friendly_url
-    else 
-      new_url = Url.create(original_url: url_str)
 
-      if new_url.errors.any?
-        @message = new_url.errors.messages
-      else
-        friendly_url = new_url.friendly_url
-        @message = domain + friendly_url
-
-        new_url.retrieve_page_title #triggers the activejob 
-      end
-    end
-
+    response = Url.process_url_params(request, url_str)
 
     respond_to do |format|
-      format.json  { render :json => @message }
+      format.json  { render :json => response }
     end
   end
 
