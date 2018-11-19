@@ -32,8 +32,9 @@ class UrlController < ApplicationController
       url.increase_visit_count #increments the number of visits by 1 
       
       return redirect_to original_url
+    else 
+      render plain: "No url found for #{friendly_url}"
     end
-    head :ok
   end
     
   #displays the top 100 most visited urls
