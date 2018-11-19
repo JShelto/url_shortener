@@ -30,6 +30,10 @@ class Url < ApplicationRecord
 		url = Url.find(id).original_url
 	end
 
+	def retrieve_page_title
+		RetrieveTitleJob.perform_later(self.friendly_url) #crawls the original url to retrieve and store title 
+	end
+
 
 	#Returns the urls, count order descending. Defaults to 100 records
 	def self.most_visited(count: 100)
@@ -38,7 +42,7 @@ class Url < ApplicationRecord
 
 	#increases the visit count by 1 and updates the record
 	def increase_visit_count 
-		visits += 1
+		self.visits += 1
 		self.save
 	end
 

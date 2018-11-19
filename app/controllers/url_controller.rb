@@ -2,14 +2,17 @@ class UrlController < ApplicationController
 
 
   def url #returns the friendly url 
-    url_str = request.query_string.to_s 
+    url_str = request.query_string.to_s.gsub("url=", "") #preserves entirety of url string 
     friendly_url = nil
     if Url.exists?(:original_url => url_str)
       friendly_url = Url.find_by(original_url: url_str).friendly_url
     else 
       new_url = Url.create(original_url: url_str)
       friendly_url = new_url.friendly_url
+
+      new_url.retrieve_page_title
     end
+
     respond_to do |format|
       format.html
       format.json  { render :json => friendly_url }
@@ -22,9 +25,8 @@ class UrlController < ApplicationController
     url = Url.find_by(friendly_url: friendly_url)
     if url.present?  
       original_url = url.original_url
-      url.update(visits: (url.visits + 1)) #increments the number of visits by 1 
+      url.increase_visit_count #increments the number of visits by 1 
       
-      RetrieveTitleJob.perform_later(friendly_url) #crawls the original url to retrieve and store title 
       return redirect_to original_url
     else 
       #add error here
