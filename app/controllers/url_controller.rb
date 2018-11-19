@@ -1,6 +1,6 @@
 class UrlController < ApplicationController
 
-  def url
+  def create
     url_str = params["url"].to_s
 
     #creates URL record returns friendly url or returns existing friendly url
@@ -28,5 +28,5 @@ class UrlController < ApplicationController
     @top_urls = Url.most_visited
     render json: @top_urls
   end
-
+  
 end

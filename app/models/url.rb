@@ -15,7 +15,6 @@ class Url < ApplicationRecord
 
 	def save_friendly_url 
 		if self.valid? #includes url validation 
-			# self.save
 
 			self.friendly_url = generate_friendly_url(self.id)
 			self.save!
