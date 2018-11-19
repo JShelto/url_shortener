@@ -1,13 +1,13 @@
 # URL Shortener
 
-##Description
+## Description
 A URL shortener - 
 
 The app takes the provided url paramater and uses it to create a URL object which is stored in the database. The shortened URL is created by converting the id of the object to Base62 encoding. Once the shortened, friendly url is created, Nokogiri is used to crawl the original url and acquire the title of the page.
 
 
 
-##API
+## API
 ##### Get shortened URL
 `curl -X POST -d "url=https://google.com" https://powerful-retreat-50185.herokuapp.com/url.json`
 
