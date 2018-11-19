@@ -12,15 +12,16 @@ class UrlController < ApplicationController
 
       new_url.retrieve_page_title
     end
-
+    
     respond_to do |format|
       format.html
-      format.json  { render :json => friendly_url }
+      format.json  { render :json => "#{request.protocol}#{request.host_with_port}/" + friendly_url }
     end
   end
 
   #redirects from the friendly url to the original url stored in the db
-  def redirect_friendly_url    
+  def redirect_friendly_url   
+    binding.pry 
     friendly_url = params["friendly_url"]
     url = Url.find_by(friendly_url: friendly_url)
     if url.present?  
