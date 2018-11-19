@@ -1,19 +1,5 @@
 class UrlController < ApplicationController
 
-  #redirects from the friendly url to the original url stored in the db
-  def redirect_shortened_url
-    friendly_url = params["friendly_url"]
-    url = Url.find_by(friendly_url: friendly_url)
-    if url.present?  
-      original_url = url.original_url
-      url.update(visits: (url.visits + 1)) #increments the number of visits by 1 
-      
-      RetrieveTitleJob.perform_later(friendly_url)
-      return redirect_to original_url
-    else 
-      #add error here
-    end
-  end
 
   def url
     url_str = params[:url].to_s
@@ -27,6 +13,21 @@ class UrlController < ApplicationController
     respond_to do |format|
       format.html
       format.json  { render :json => friendly_url }
+    end
+  end
+
+  #redirects from the friendly url to the original url stored in the db
+  def redirect_shortened_url    
+    friendly_url = params["friendly_url"]
+    url = Url.find_by(friendly_url: friendly_url)
+    if url.present?  
+      original_url = url.original_url
+      url.update(visits: (url.visits + 1)) #increments the number of visits by 1 
+      
+      RetrieveTitleJob.perform_later(friendly_url)
+      return redirect_to original_url
+    else 
+      #add error here
     end
   end
     

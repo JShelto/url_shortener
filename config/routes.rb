@@ -3,7 +3,8 @@ Rails.application.routes.draw do
 
   get "/top", to: "url#top", format: true
 
+  match "/url", to: "url#url", via: [:get, :post], format: true
+
   get "/:friendly_url", to: "url#redirect_shortened_url"
 
-  post "/url", to: "url#url", format: true
 end
