@@ -3,9 +3,9 @@ Rails.application.routes.draw do
 
   get "/top", to: "url#top"
 
-  # match "/url", to: "url#url", via: [:get, :post], format: true
-  get "/url", to: "url#url"
-  post "/url", to: "url#url"
+  match "/url", to: "url#url", via: [:get, :post]#, format: true
+  # get "/url", to: "url#url"
+  # post "/url", to: "url#url"
 
   get "/:friendly_url", to: "url#redirect_friendly_url"
 
