@@ -1,8 +1,8 @@
 class UrlController < ApplicationController
 
 
-  def url
-    url_str = params[:url].to_s
+  def url #returns the friendly url 
+    url_str = request.query_string.to_s 
     friendly_url = nil
     if Url.exists?(:original_url => url_str)
       friendly_url = Url.find_by(original_url: url_str).friendly_url
@@ -17,18 +17,19 @@ class UrlController < ApplicationController
   end
 
   #redirects from the friendly url to the original url stored in the db
-  def redirect_shortened_url    
+  def redirect_friendly_url    
     friendly_url = params["friendly_url"]
     url = Url.find_by(friendly_url: friendly_url)
     if url.present?  
       original_url = url.original_url
       url.update(visits: (url.visits + 1)) #increments the number of visits by 1 
       
-      RetrieveTitleJob.perform_later(friendly_url)
+      RetrieveTitleJob.perform_later(friendly_url) #crawls the original url to retrieve and store title 
       return redirect_to original_url
     else 
       #add error here
     end
+    head :ok
   end
     
   #displays the top 100 most visited urls
