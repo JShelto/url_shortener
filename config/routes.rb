@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   get "/top", to: "url#top"
 
-  post "/url", to: "url#url" #, format: true
+  post "/url", to: "url#url"
 
   get "/:friendly_url", to: "url#redirect_friendly_url"
 

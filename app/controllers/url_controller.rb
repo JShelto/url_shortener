@@ -1,9 +1,10 @@
 class UrlController < ApplicationController
 
-  def url #returns the friendly url 
-    url_str = params["url"]
+  def url
+    url_str = params["url"].to_s
 
-    response = Url.process_url_params(request, url_str)
+    #creates URL record returns friendly url or returns existing friendly url
+    response = Url.process_url_params(request, url_str) 
 
     respond_to do |format|
       format.json  { render :json => response }
@@ -16,7 +17,7 @@ class UrlController < ApplicationController
     url = Url.find_by(friendly_url: friendly_url)
     if url.present?  
       original_url = url.original_url
-      url.increase_visit_count #increments the number of visits by 1 
+      url.track_visit #increments the number of visits by 1 
 
       return redirect_to original_url
     else 

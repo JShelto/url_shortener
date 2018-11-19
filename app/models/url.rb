@@ -39,7 +39,7 @@ class Url < ApplicationRecord
 	end
 
 	#increases the visit count by 1 and updates the record
-	def increase_visit_count 
+	def track_visit
 		self.visits += 1
 		self.save
 	end
