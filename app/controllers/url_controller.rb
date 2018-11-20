@@ -23,6 +23,7 @@ class UrlController < ApplicationController
 
   #redirects friendly url to original url or returns an error
   def show
+    binding.pry
     friendly_url = params["friendly_url"]
     u = Url.find_by(friendly_url: friendly_url)
     if u.present?  
@@ -31,16 +32,8 @@ class UrlController < ApplicationController
 
       return redirect_to original_url, status: 301
     else 
-      render :json => {:error => "No url found for #{full_path(request) + friendly_url}"}.to_json, :status => 404
+      render :json => {:error => "No url found"}.to_json, :status => 404
     end
   end
-
-
-
-  private 
-
-    def full_path(request)
-      path = request.domain + request.path + "/"
-    end
 
 end
