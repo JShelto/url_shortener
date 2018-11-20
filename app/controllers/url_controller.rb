@@ -2,7 +2,7 @@ class UrlController < ApplicationController
 
   #displays the top 100 most visited urls
   def index
-    @top_urls = Url.most_visited
+    @top_urls = format_urls(Url.most_visited)
 
     respond_to do |format|
       format.html
@@ -32,7 +32,6 @@ class UrlController < ApplicationController
     friendly_url = params["friendly_url"]
     u = Url.find_by(friendly_url: friendly_url)
     if u.present?  
-      original_url = u.original_url
       u.track_visit #increments the number of visits by 1 
 
       return redirect_to original_url, status: 301
@@ -47,6 +46,19 @@ class UrlController < ApplicationController
 
     def full_path(request)
       request.protocol + request.host_with_port + "/"
+    end
+
+    #reformats results, excluding unnecessary columns and displaying a rank based on visit count
+    def format_urls(array)
+      array.each_with_index.map {|u, i| 
+        u = {
+          rank: (i+1),
+          original_url: u.original_url,
+          friendly_url: u.friendly_url,
+          title: u.title,
+          visits: u.visits
+        }
+      }
     end
 
 end
