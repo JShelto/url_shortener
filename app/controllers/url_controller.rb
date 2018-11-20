@@ -44,5 +44,3 @@ class UrlController < ApplicationController
     end
 
 end
-
-# curl -X POST -d "url=https://test123.com" http://localhost:3000/url.json
