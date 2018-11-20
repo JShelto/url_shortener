@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   get "top", to: "url#index"
 
-  post "url", to: "url#create"
+  match "url", to: "url#create", via: [:get, :post]
 
   get ":friendly_url", to: "url#show"
 end

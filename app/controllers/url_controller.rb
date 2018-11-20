@@ -14,16 +14,21 @@ class UrlController < ApplicationController
   def create
     u = Url.find_or_create_by(original_url: params["url"])
 
+    if u.errors.any?
+      response = u.errors.messages
+    else 
+      response = full_path(request) + u.friendly_url
+    end
+
     respond_to do |format|
       format.html
-      format.json { render :json => full_path(request) + u.friendly_url }
+      format.json { render :json => response }
     end
   end
 
 
   #redirects friendly url to original url or returns an error
   def show
-    binding.pry
     friendly_url = params["friendly_url"]
     u = Url.find_by(friendly_url: friendly_url)
     if u.present?  
@@ -32,8 +37,16 @@ class UrlController < ApplicationController
 
       return redirect_to original_url, status: 301
     else 
-      render :json => {:error => "No url found"}.to_json, :status => 404
+      render :json => {:error => "No url found for #{request.original_url}"}.to_json, :status => 404
     end
   end
+
+
+
+  private 
+
+    def full_path(request)
+      request.protocol + request.host_with_port + "/"
+    end
 
 end
