@@ -1,32 +1,48 @@
 class UrlController < ApplicationController
 
-  def create
-    url_str = params["url"].to_s
+  #displays the top 100 most visited urls
+  def index
+    @top_urls = Url.most_visited
 
-    #creates URL record returns friendly url or returns existing friendly url
-    response = Url.process_url_params(request, url_str) 
-
-    render json: response
+    respond_to do |format|
+      format.html
+      format.json { render :json => @top_urls }
+    end
   end
 
-  #redirects from the friendly url to the original url stored in the db
-  def redirect_friendly_url   
+  def create
+    u = Url.find_or_create_by(original_url: params["url"])
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => full_path(request) + u.friendly_url }
+    end
+  end
+
+  def show
     friendly_url = params["friendly_url"]
     url = Url.find_by(friendly_url: friendly_url)
     if url.present?  
       original_url = url.original_url
       url.track_visit #increments the number of visits by 1 
 
-      return redirect_to original_url
+      return redirect_to original_url, status: 301
     else 
-      render json: "No url found for #{friendly_url}"
+      respond_to do |format|
+        format.html
+        format.json { render :json => "No url found for #{full_path(request) + u.friendly_url}"}
+      end
     end
   end
 
-  #displays the top 100 most visited urls
-  def top
-    @top_urls = Url.most_visited
-    render json: @top_urls
-  end
-  
+
+
+  private 
+
+    def full_path(request)
+      path = request.domain + request.path + "/"
+    end
+
 end
+
+# curl -X POST -d "url=https://test123.com" http://localhost:3000/url.json

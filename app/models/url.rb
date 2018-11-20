@@ -15,6 +15,7 @@ class Url < ApplicationRecord
 
 	def save_friendly_url 
 		if self.valid? #includes url validation 
+			# self.save
 
 			self.friendly_url = generate_friendly_url(self.id)
 			self.save!
@@ -53,29 +54,29 @@ class Url < ApplicationRecord
 		end
 	end
 
-	def self.process_url_params(request, url_str)
-		domain = "#{request.protocol}#{request.host_with_port}/" #current domain 
-    @message = nil #final output
+	# def self.process_url_params(request, url_str)
+	# 	domain = "#{request.protocol}#{request.host_with_port}/" #current domain 
+ #    @message = nil #final output
 
-    if Url.exists?(:original_url => url_str)
-      #return friendly url that already exists in db
-      friendly_url = Url.find_by(original_url: url_str).friendly_url
-      @message = domain + friendly_url
-    else 
-      new_url = Url.create(original_url: url_str)
+ #    if Url.exists?(:original_url => url_str)
+ #      #return friendly url that already exists in db
+ #      friendly_url = Url.find_by(original_url: url_str).friendly_url
+ #      @message = domain + friendly_url
+ #    else 
+ #      new_url = Url.create(original_url: url_str)
 
-      if new_url.errors.any?
-        @message = new_url.errors.messages
-      else
-        friendly_url = new_url.friendly_url
-        @message = domain + friendly_url
+ #      if new_url.errors.any?
+ #        @message = new_url.errors.messages
+ #      else
+ #        friendly_url = new_url.friendly_url
+ #        @message = domain + friendly_url
 
-        new_url.retrieve_page_title #triggers the activejob 
-      end
-    end
+ #        new_url.retrieve_page_title #triggers the activejob 
+ #      end
+ #    end
 
-    @message
-  end
+ #    @message
+ #  end
 
 	private
 	
